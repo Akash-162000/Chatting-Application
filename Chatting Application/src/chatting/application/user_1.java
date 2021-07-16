@@ -15,6 +15,7 @@ public class user_1 implements ActionListener{
 	JTextField t1= new JTextField();
 	JButton b1 = new JButton("Send");
 	static JPanel ta1 = new JPanel();
+	
 	Timer timer;
 	
 	static Box box = Box.createVerticalBox();
@@ -143,12 +144,19 @@ public class user_1 implements ActionListener{
 		b1.addActionListener(this);
 		f.add(b1);
 		
-		ta1.setBounds(5,70,390,495);
+		//ta1.setBounds(5,70,390,495);
 		ta1.setFont(new Font("SAN_SERIF",Font.PLAIN,16));
 		
 		
-		f.add(ta1);
+		//f.add(ta1);
 		
+		JScrollPane scroll = new JScrollPane(ta1);
+		
+		scroll.setBounds(5,70,390,495);
+		scroll.setBorder(new EmptyBorder(3,3,3,3));
+		scroll.getVerticalScrollBar().setPreferredSize(new Dimension(13, 0));
+		
+		f.add(scroll);
 		
 		f.setLayout(null);
 		
@@ -175,7 +183,7 @@ public class user_1 implements ActionListener{
 		
 		right.add(p2, BorderLayout.LINE_END);
 		box.add(right);
-		box.add(Box.createRigidArea(new Dimension(0,5)));
+		box.add(Box.createRigidArea(new Dimension(0,10)));
 		ta1.add(box,BorderLayout.PAGE_START);
 		f.validate();
 		d_out.writeUTF(temp);
@@ -215,13 +223,11 @@ public class user_1 implements ActionListener{
 	public static JPanel textarea_panel2(String temp)
 	{
 		JPanel p3 = new JPanel();
-		p3.setLayout(new BoxLayout(p3,BoxLayout.Y_AXIS));
-		
+		p3.setLayout(new BoxLayout(p3, BoxLayout.Y_AXIS));
 		JLabel l2 = new JLabel("<html><p style = \" width : 150px\">"+temp+"</p></html>");
 		l2.setFont(new Font("SAN_SERIF",Font.PLAIN,16));
-		l2.setBackground(Color.decode("#a9a9b0"));
+		l2.setBackground(new Color(200,200,200));
 		l2.setOpaque(true);
-		l2.setMaximumSize(new Dimension(1000,150));
 		l2.setBorder(new EmptyBorder(5,10,5,10));
 		
 		Calendar cal = Calendar.getInstance();
@@ -230,12 +236,12 @@ public class user_1 implements ActionListener{
 		JLabel l3 = new JLabel();
 		
 		l3.setText(time.format(cal.getTime()));
-		//l3.setBackground(new Color(200,200,200));
-		//l3.setOpaque(true);
+		
 		p3.add(l2);
 		p3.add(l3);
 		return p3;
 	}
+	
 	
 	public static void main(String args[])
 	{
@@ -262,7 +268,7 @@ public class user_1 implements ActionListener{
 		JPanel left = new JPanel(new BorderLayout());
 		left.add(temp,BorderLayout.LINE_START);
 		box.add(left);
-		box.add(Box.createRigidArea(new Dimension(0,5)));
+		box.add(Box.createRigidArea(new Dimension(0,10)));
 		ta1.add(box,BorderLayout.PAGE_START);
 		f.validate();
 		}

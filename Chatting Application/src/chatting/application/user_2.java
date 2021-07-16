@@ -137,11 +137,20 @@ public class user_2 implements ActionListener{
 		b1.addActionListener(this);
 		f.add(b1);
 		
-		ta1.setBounds(5,70,390,495);
+		//ta1.setBounds(5,70,390,495);
 		ta1.setFont(new Font("SAN_SERIF",Font.PLAIN,16));
+				
 		
-		
-		f.add(ta1);
+		//f.add(ta1);
+				
+		JScrollPane scroll = new JScrollPane(ta1);
+				
+		scroll.setBounds(5,70,390,495);
+		scroll.setBorder(new EmptyBorder(3,3,3,3));
+		scroll.getVerticalScrollBar().setPreferredSize(new Dimension(13, 0));
+				
+		f.add(scroll);
+				
 		
 		
 		f.setLayout(null);
@@ -166,7 +175,7 @@ public class user_2 implements ActionListener{
 		right.add(p2,BorderLayout.LINE_END);
 		
 		box.add(right);
-		box.add(Box.createRigidArea(new Dimension(0,5)));
+		box.add(Box.createRigidArea(new Dimension(0,10)));
 		ta1.setLayout(new BorderLayout());
 		
 		ta1.add(box,BorderLayout.PAGE_START);
@@ -250,7 +259,7 @@ public class user_2 implements ActionListener{
 		JPanel left = new JPanel(new BorderLayout());
 		left.add(temp,BorderLayout.LINE_START);
 		box.add(left);
-		box.add(Box.createRigidArea(new Dimension(0,5)));
+		box.add(Box.createRigidArea(new Dimension(0,10)));
 		ta1.add(box,BorderLayout.PAGE_START);
 		f.validate();
 		}
