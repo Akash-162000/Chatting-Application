@@ -5,19 +5,23 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.net.*;
 import java.io.*;
+import javax.swing.border.*;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
-public class user_2 extends JFrame implements ActionListener{
-	
+public class user_2 implements ActionListener{
+	static JFrame f = new JFrame();
 	JPanel p1 = new JPanel();
 	JTextField t1= new JTextField();
 	JButton b1 = new JButton("Send");
-	static JTextArea ta1 = new JTextArea();
+	static JPanel ta1 = new JPanel();
+	static Box box = Box.createVerticalBox();
 	
 	static Socket socket;
 	static DataInputStream d_in;
 	
 	static DataOutputStream d_out;
-	
+	Timer timer ;
 	Boolean typing = false;
 	
 	user_2(){
@@ -27,7 +31,7 @@ public class user_2 extends JFrame implements ActionListener{
 		p1.setLayout(null);
 		p1.setBackground(Color.decode("#2a162e"));
 		p1.setBounds(0,0,400,65);
-		add(p1);
+		f.add(p1);
 		
 		ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("chatting/application/icons/3.png"));
 		Image i2 = i1.getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT);
@@ -89,7 +93,7 @@ public class user_2 extends JFrame implements ActionListener{
 		p1.add(l4);
 		
 		
-		Timer timer = new Timer(1,new ActionListener() {
+		timer = new Timer(1,new ActionListener() {
 			
 			public void actionPerformed(ActionEvent ae) {
 				if(!typing)
@@ -104,7 +108,7 @@ public class user_2 extends JFrame implements ActionListener{
 		
 		t1.setBounds(10,570,300,35);
 		t1.setFont(new Font("SAN_SERIF", Font.PLAIN,16));
-		add(t1);
+		f.add(t1);
 		
 		t1.addKeyListener(new KeyAdapter() {
 			
@@ -131,39 +135,96 @@ public class user_2 extends JFrame implements ActionListener{
 		b1.setForeground(Color.WHITE);
 		b1.setFont(new Font("SAN_SERIF", Font.BOLD,14));
 		b1.addActionListener(this);
-		add(b1);
+		f.add(b1);
 		
 		ta1.setBounds(5,70,390,495);
 		ta1.setFont(new Font("SAN_SERIF",Font.PLAIN,16));
-		ta1.setEditable(false);
-		ta1.setLineWrap(true);
-		ta1.setWrapStyleWord(true);
-		ta1.setBackground(new Color(200,200,200));
-		add(ta1);
 		
 		
-		setLayout(null);
+		f.add(ta1);
 		
-		setSize(400,620);
-		setLocation(850,100);
-		setUndecorated(true);
-		setVisible(true);
+		
+		f.setLayout(null);
+		
+		f.setSize(400,620);
+		f.setLocation(850,100);
+		f.setUndecorated(true);
+		f.setVisible(true);
 	}
 	
-	public void actionPerformed(ActionEvent ae) {
+    public void actionPerformed(ActionEvent ae) {
+		
+		
+		
 		try {
-		String temp = t1.getText();
+			
+		String temp =  t1.getText();
 		
 		
-		ta1.setText(ta1.getText()+"\n"+"\t\t"+temp);
+		JPanel p2 = textarea_panel1(temp);
+		JPanel right = new JPanel(new BorderLayout());
+		right.add(p2,BorderLayout.LINE_END);
+		
+		box.add(right);
+		box.add(Box.createRigidArea(new Dimension(0,5)));
+		ta1.setLayout(new BorderLayout());
+		
+		ta1.add(box,BorderLayout.PAGE_START);
+		f.validate();
 		d_out.writeUTF(temp);
-		
 		t1.setText("");
 		
-		}
-		catch(Exception err) {
+		}catch(Exception err) {
 			t1.setText("");
 		}
+	}
+	
+    public static JPanel textarea_panel1(String temp)
+	{
+		JPanel p3 = new JPanel();
+		p3.setLayout(new BoxLayout(p3,BoxLayout.Y_AXIS));
+		
+		JLabel l2 = new JLabel("<html><p style = \" width : 150px\">"+temp+"</p></html>");
+		l2.setFont(new Font("SAN_SERIF",Font.PLAIN,16));
+		l2.setBackground(Color.decode("#68369b"));
+		l2.setForeground(Color.WHITE);
+		l2.setOpaque(true);
+		
+		l2.setBorder(new EmptyBorder(5,10,5,10));
+		
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat time = new SimpleDateFormat("HH:MM");
+		
+		JLabel l3 = new JLabel();
+		
+		l3.setText(time.format(cal.getTime()));
+		//l3.setBackground(new Color(200,200,200));
+		//l3.setOpaque(true);
+		p3.add(l2);
+		p3.add(l3);
+		return p3;
+	}
+    
+	public static JPanel textarea_panel2(String temp)
+	{
+		JPanel p3 = new JPanel();
+		p3.setLayout(new BoxLayout(p3, BoxLayout.Y_AXIS));
+		JLabel l2 = new JLabel("<html><p style = \" width : 150px\">"+temp+"</p></html>");
+		l2.setFont(new Font("SAN_SERIF",Font.PLAIN,16));
+		l2.setBackground(new Color(200,200,200));
+		l2.setOpaque(true);
+		l2.setBorder(new EmptyBorder(5,10,5,10));
+		
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat time = new SimpleDateFormat("HH:MM");
+		
+		JLabel l3 = new JLabel();
+		
+		l3.setText(time.format(cal.getTime()));
+		
+		p3.add(l2);
+		p3.add(l3);
+		return p3;
 	}
 	
 	public static void main(String args[])
@@ -184,13 +245,20 @@ public class user_2 extends JFrame implements ActionListener{
 		while(true)
 		{
 		input = d_in.readUTF();
-		ta1.setText(ta1.getText()+"\n "+input);
+		
+		JPanel temp = textarea_panel2(input);
+		JPanel left = new JPanel(new BorderLayout());
+		left.add(temp,BorderLayout.LINE_START);
+		box.add(left);
+		box.add(Box.createRigidArea(new Dimension(0,5)));
+		ta1.add(box,BorderLayout.PAGE_START);
+		f.validate();
 		}
 		}
 		}
 		catch(Exception e)
 		{
-			
+			System.out.println(e);
 		}
 		
 	}
